@@ -7,7 +7,7 @@ from itertools import batched
 import requests
 from rayyan import Rayyan
 from rayyan.notes import Notes
-from rayyan.review import Review
+from rayyan.reviews import Review
 
 import bigger_picker.config as config
 from bigger_picker.credentials import load_rayyan_credentials
@@ -47,6 +47,9 @@ class RayyanManager:
                 # Missing fulltext. Shouldn't happen, but skip just in case.
                 continue
             article_labels = article.get("customizations", {}).get("labels", {})  # type: ignore
+            if config.RAYYAN_LABELS["batch_pending"] in article_labels:
+                # Already pending extraction
+                continue
             if any(
                 label in config.ASANA_SEARCHES_ENUM_VALUES for label in article_labels
             ):
