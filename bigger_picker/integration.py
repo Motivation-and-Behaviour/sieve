@@ -129,9 +129,6 @@ class IntegrationManager:
         }
 
         if dataset_vals == task_vals:
-            self._log(
-                f"No changes in {dataset['fields']['Dataset ID']}, skipping update."
-            )
             return task
 
         searches = set()
@@ -258,6 +255,8 @@ class IntegrationManager:
 
         self._log("Getting Airtable records")
         datasets = self.airtable.tables["Datasets"].all()
+        records_updated = 0
+        records_not_updated = 0
 
         for dataset in datasets:
             dataset_bpipd = dataset["fields"].get("Dataset ID", None)
@@ -273,11 +272,16 @@ class IntegrationManager:
 
                 if task_status != dataset_status:
                     payload = {"Status": task_status}
+                    records_updated += 1
                     self._log(f"Updating Airtable record {dataset['id']}")
                     self.airtable.update_record("Datasets", dataset["id"], payload)
 
                 else:
-                    self._log(f"No status change for dataset {dataset_bpipd}.")
+                    records_not_updated += 1
+
+        self._log(
+            f"Updated {records_updated} records; {records_not_updated} unchanged."
+        )
 
     @requires_services("airtable")
     def upload_extraction_to_airtable(
