@@ -16,7 +16,7 @@ from bigger_picker.datamodels import ArticleLLMExtract, ScreeningDecision
 
 
 class OpenAIManager:
-    def __init__(self, api_key: str | None = None, model: str = "gpt-5.1"):
+    def __init__(self, api_key: str | None = None, model: str = "gpt-5.2"):
         if api_key is None:
             api_key = load_token("OPENAI_TOKEN")
 
