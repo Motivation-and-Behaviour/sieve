@@ -3,7 +3,7 @@
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
 ![GitHub License](https://img.shields.io/github/license/Motivation-and-Behaviour/sieve)
 [![Actions status](https://github.com/Motivation-and-Behaviour/sieve/workflows/Tests/badge.svg)](https://github.com/Motivation-and-Behaviour/sieve/actions)
-[![codecov](https://codecov.io/gh/Motivation-and-Behaviour/sieve/graph/badge.svg?token=QvpFlLP1JD)](https://codecov.io/gh/Motivation-and-Behaviour/sieve)
+[![codecov](https://codecov.io/gh/Motivation-and-Behaviour/sieve/graph/badge.svg?token=avmeh0jcwS)](https://codecov.io/gh/Motivation-and-Behaviour/sieve)
 
 Sieve (Systematic Identification, EValuation, and Extraction) is a set of tools to conduct abstract and full-text screening, and (eventually) data extraction.
 It is the generic version of the project-specific tool [Bigger Picker](https://github.com/Motivation-and-Behaviour/bigger_picker).
