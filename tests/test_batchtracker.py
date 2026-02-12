@@ -52,12 +52,10 @@ class TestAddBatch:
     def test_add_batch_with_different_types(self, tracker):
         tracker.add_batch("batch_1", "abstract")
         tracker.add_batch("batch_2", "fulltext")
-        tracker.add_batch("batch_3", "extraction")
 
         data = tracker._load()
         assert data["batch_1"]["type"] == "abstract"
         assert data["batch_2"]["type"] == "fulltext"
-        assert data["batch_3"]["type"] == "extraction"
 
     def test_add_batch_stores_valid_iso_timestamp(self, tracker):
         tracker.add_batch("batch_time", "abstract")
@@ -122,19 +120,6 @@ class TestMarkCompleted:
 
         data = tracker._load()
         assert "nonexistent" not in data
-
-    def test_preserves_other_fields_on_completion(self, tracker):
-        tracker.add_batch("batch_1", "extraction")
-        original_data = tracker._load()
-        original_created = original_data["batch_1"]["created_at"]
-        original_type = original_data["batch_1"]["type"]
-
-        tracker.mark_completed("batch_1")
-
-        data = tracker._load()
-        assert data["batch_1"]["created_at"] == original_created
-        assert data["batch_1"]["type"] == original_type
-        assert data["batch_1"]["status"] == "completed"
 
 
 class TestLoadSave:

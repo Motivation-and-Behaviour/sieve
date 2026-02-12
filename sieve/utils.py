@@ -55,7 +55,7 @@ def create_stats_table(stats: dict) -> Table:
         show_header=True,
         header_style="bold magenta",
         show_lines=True,
-        title="Bigger Picker Status",
+        title="Sieve Status",
     )
     table.add_column("Metric", style="cyan", vertical="middle")
     table.add_column("Value", style="green", vertical="middle", justify="center")
@@ -74,11 +74,7 @@ def create_stats_table(stats: dict) -> Table:
     total_polls_table = make_subtable(platforms_dict, stats["total_polls"])
     table.add_row("Total Polls", total_polls_table)
     pending_batches_table = make_subtable(
-        {
-            "abstract_screen": "Abstracts",
-            "fulltext_screen": "Fulltexts",
-            "extraction": "Extractions",
-        },
+        {"abstract_screen": "Abstracts", "fulltext_screen": "Fulltexts"},
         stats["pending_batches"],
     )
     table.add_row("Pending Batches", pending_batches_table)

@@ -31,8 +31,6 @@ class RayyanManager:
     def get_unscreened_abstracts(
         self, max_articles: int | None = None, batch_size: int = 1000
     ) -> list[dict]:
-        # TODO: This should not use labels but instead check if I have already voted
-
         labels_to_check = (
             list(config.RAYYAN_LABELS.values()) + config.RAYYAN_EXCLUSION_LABELS
         )
@@ -75,8 +73,6 @@ class RayyanManager:
 
     def get_unscreened_fulltexts(self, max_articles: int | None = None) -> list[dict]:
         # TODO: this should include batching like get_unscreened_abstracts
-
-        # TODO: This should not use labels but instead check if I have already voted
         results_params = {"extra[mode]": "included"}
         labels_to_check = (
             list(config.RAYYAN_LABELS.values()) + config.RAYYAN_EXCLUSION_LABELS

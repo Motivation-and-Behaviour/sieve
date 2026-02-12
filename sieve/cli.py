@@ -180,15 +180,11 @@ def monitor(
 
     stats = {
         "status": "[green]Running[/green]",
-        "last_check": {"asana": "Never", "rayyan": "Never", "openai": "Never"},
-        "last_sync": {"asana": "Never", "rayyan": "Never", "openai": "Never"},
-        "total_syncs": {"asana": 0, "rayyan": 0, "openai": 0},
-        "total_polls": {"asana": 0, "rayyan": 0, "openai": 0},
-        "pending_batches": {
-            "abstract_screen": 0,
-            "fulltext_screen": 0,
-            "extraction": 0,
-        },
+        "last_check": {"rayyan": "Never", "openai": "Never"},
+        "last_sync": {"rayyan": "Never", "openai": "Never"},
+        "total_syncs": {"rayyan": 0, "openai": 0},
+        "total_polls": {"rayyan": 0, "openai": 0},
+        "pending_batches": {"abstract_screen": 0, "fulltext_screen": 0},
         "start_time": datetime.now(),
         "consecutive_errors": {"rayyan": 0, "openai": 0},
     }
@@ -202,13 +198,10 @@ def monitor(
                 pending = integration.tracker.get_pending_batches()
                 stats = integration.update_stats_pending_batches(live, stats, pending)
 
-                stats = integration.monitor_asana(live, stats)
-
                 if cycle_count % full_frequency == 0:
                     (
                         unscreened_abstracts,
                         unscreened_fulltexts,
-                        unextracted_articles,
                         stats,
                     ) = integration.monitor_rayyan(live, stats)
 
@@ -217,7 +210,6 @@ def monitor(
                         stats,
                         unscreened_abstracts,
                         unscreened_fulltexts,
-                        unextracted_articles,
                     )
                     pending = integration.tracker.get_pending_batches()
                     stats = integration.update_stats_pending_batches(

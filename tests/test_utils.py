@@ -1,5 +1,3 @@
-
-
 import sieve.utils as utils
 
 
@@ -203,17 +201,13 @@ def test_create_stats_table_basic():
         },
         "total_syncs": {"asana": 5, "rayyan": 3, "openai": 2},
         "total_polls": {"asana": 10, "rayyan": 8, "openai": 6},
-        "pending_batches": {
-            "abstract_screen": 2,
-            "fulltext_screen": 1,
-            "extraction": 0,
-        },
+        "pending_batches": {"abstract_screen": 2, "fulltext_screen": 1},
     }
 
     table = utils.create_stats_table(stats)
 
     assert table is not None
-    assert table.title == "Bigger Picker Status"
+    assert table.title == "Sieve Status"
     assert len(table.columns) == 2
 
 
@@ -231,11 +225,7 @@ def test_create_stats_table_uptime_calculation():
         "last_sync": {"asana": "N/A", "rayyan": "N/A", "openai": "N/A"},
         "total_syncs": {"asana": 0, "rayyan": 0, "openai": 0},
         "total_polls": {"asana": 0, "rayyan": 0, "openai": 0},
-        "pending_batches": {
-            "abstract_screen": 0,
-            "fulltext_screen": 0,
-            "extraction": 0,
-        },
+        "pending_batches": {"abstract_screen": 0, "fulltext_screen": 0},
     }
 
     table = utils.create_stats_table(stats)
@@ -259,11 +249,7 @@ def test_create_stats_table_with_pending_batches():
         },
         "total_syncs": {"asana": 1, "rayyan": 1, "openai": 1},
         "total_polls": {"asana": 1, "rayyan": 1, "openai": 1},
-        "pending_batches": {
-            "abstract_screen": 10,
-            "fulltext_screen": 5,
-            "extraction": 3,
-        },
+        "pending_batches": {"abstract_screen": 10, "fulltext_screen": 5},
     }
 
     table = utils.create_stats_table(stats)

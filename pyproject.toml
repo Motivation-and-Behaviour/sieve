@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sieve"
-version = "0.3.0"
+version = "0.1.0"
 description = "Sieve (Systematic Identification, EValuation, and Extraction) is a set of tools to conduct abstract and full-text screening, and (eventually) data extraction."
 authors = [{ name = "Taren Sanders", email = "taren.sanders@acu.edu.au" }]
 readme = "README.md"
@@ -15,7 +15,7 @@ dependencies = ["dotenv", "openai", "rayyan-sdk", "typer"]
 dev = ["jupyter", "pytest", "pytest-cov", "rispy", "ruff"]
 
 [project.scripts]
-bigger-picker = "sieve.cli:app"
+sieve = "sieve.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["."]

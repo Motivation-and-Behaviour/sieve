@@ -20,7 +20,7 @@ class BatchTracker:
     def add_batch(self, batch_id, batch_type):
         data = self._load()
         data[batch_id] = {
-            "type": batch_type,  # 'abstract', 'fulltext', or 'extraction'
+            "type": batch_type,  # 'abstract', 'fulltext'
             "status": "in_progress",
             "created_at": datetime.now().isoformat(),
         }

@@ -70,30 +70,48 @@ The project is built and tested using Python 3.13, but should work on Python 3.1
 ## Configuration
 
 Most settings for the project are set in the [sieve/config.py](sieve/config.py) file.
-If you are using this package for a project other than the Bigger Picture, you will need to adjust the settings there.
+You will need to set:
+
+- `RAYYAN_REVIEW_ID`: The ID of your Rayyan review.
+- `RAYYAN_EXCLUSION_LABELS` - these need to match the exact order of `EXCLUSION_CRITERIA`, and they have to start with `__EXR__`
+- `STUDY_OBJECTIVES`
+- `INCLUSION_CRITERIA`
+- `EXCLUSION_CRITERIA`
+
+Use the provided parameters as examples for how to format these settings.
 
 You will also need a `rayyan_tokens.json` file for Rayyan API authentication.
 
 ## Usage
 
-Once installed, you can use the command-line interface (CLI) to interact with the Bigger Picker tools.
+Once installed, you can use the command-line interface (CLI) to interact with sieve.
 
-The CLI provides two main commands:
+The CLI provides three main commands:
 
-- **Process articles and extract data:**
-
-  ```sh
-  sieve process
-  ```
-
-- **Sync Airtable and Asana statuses:**
+- **Screen fulltexts:**
 
   ```sh
-  sieve sync
+  sieve screenft
   ```
 
-Appending `--help` to either command will provide additional options and usage information.
-See `python -m sieve.cli --help` for all options.
+- **Screen abstracts:**
+
+  ```sh
+  sieve screenabstract
+  ```
+
+- **Monitor Rayyan for new articles to screen:**
+
+  ```sh
+  sieve monitor
+  ```
+
+Note that `monitor` runs continuously.
+Since it runs continuously, it can take advantage of batch processing from OpenAI, which halves the costs but will take slightly longer.
+The `monitor` command will check if a batch is finished and upload the results to Rayyan, and also check if new articles have been added to Rayyan and add them to a batch for screening.
+It is the recommended way to use sieve.
+
+Appending `--help` to a command will provide additional options and usage information.
 
 ## License
 
