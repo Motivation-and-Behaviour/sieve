@@ -1,7 +1,4 @@
-import math
 
-import pytest
-from pyairtable.testing import fake_record
 
 import sieve.utils as utils
 
