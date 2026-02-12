@@ -2,7 +2,7 @@ import json
 
 import pytest
 
-import bigger_picker.credentials as creds
+import sieve.credentials as creds
 
 ignore_token = "TESTTOKEN"
 

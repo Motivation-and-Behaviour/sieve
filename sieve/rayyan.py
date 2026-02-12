@@ -9,8 +9,8 @@ from rayyan import Rayyan
 from rayyan.notes import Notes
 from rayyan.reviews import Review
 
-import bigger_picker.config as config
-from bigger_picker.credentials import load_rayyan_credentials
+import sieve.config as config
+from sieve.credentials import load_rayyan_credentials
 
 
 class RayyanManager:
@@ -18,8 +18,6 @@ class RayyanManager:
         self,
         rayyan_creds_path: str | None = None,
         review_id: int = config.RAYYAN_REVIEW_ID,
-        unextracted_label: str = config.RAYYAN_LABELS["unextracted"],
-        extracted_label: str = config.RAYYAN_LABELS["extracted"],
     ):
         if rayyan_creds_path is None:
             rayyan_creds_path = load_rayyan_credentials()
@@ -29,41 +27,12 @@ class RayyanManager:
         self.review = Review(self.rayyan_instance)
         self.review_id = review_id
         self.notes_instance = Notes(self.rayyan_instance)
-        self.unextracted_label = unextracted_label
-        self.extracted_label = extracted_label
-
-    def get_unextracted_articles(self) -> list[dict]:
-        results_params = {"extra[user_labels][]": self.unextracted_label}
-
-        included_results = self._retry_on_auth_error(
-            lambda: self.review.results(self.review_id, results_params)  # type: ignore
-        )
-
-        unextracted = []
-        priority = []
-
-        for article in included_results["data"]:  # type: ignore
-            if not article.get("fulltexts", []):
-                # Missing fulltext. Shouldn't happen, but skip just in case.
-                continue
-            article_labels = article.get("customizations", {}).get("labels", {})  # type: ignore
-            if config.RAYYAN_LABELS["batch_pending"] in article_labels:
-                # Already pending extraction
-                continue
-            if any(
-                label in config.ASANA_SEARCHES_ENUM_VALUES for label in article_labels
-            ):
-                priority.append(article)
-            else:
-                unextracted.append(article)
-
-        unextracted = priority + unextracted
-
-        return unextracted  # type: ignore
 
     def get_unscreened_abstracts(
         self, max_articles: int | None = None, batch_size: int = 1000
     ) -> list[dict]:
+        # TODO: This should not use labels but instead check if I have already voted
+
         labels_to_check = (
             list(config.RAYYAN_LABELS.values()) + config.RAYYAN_EXCLUSION_LABELS
         )
@@ -74,10 +43,9 @@ class RayyanManager:
             lambda: self.review.results(self.review_id, results_params)  # type: ignore
         )
         total_articles = results["recordsFiltered"]  # type: ignore
-        batches = batched(range(0, total_articles), batch_size)
+        batches = batched(range(0, total_articles), batch_size, strict=False)
 
-        non_priority = []
-        priority = []
+        unscreened = []
 
         for batch in batches:
             results_params = {
@@ -94,19 +62,12 @@ class RayyanManager:
                 if any(label in labels_to_check for label in article_labels):
                     continue
 
-                if any(
-                    label in config.ASANA_SEARCHES_ENUM_VALUES
-                    for label in article_labels
-                ):
-                    priority.append(article)
-                else:
-                    non_priority.append(article)
+                unscreened.append(article)
 
             if max_articles is not None:
-                if len(priority) + len(non_priority) >= max_articles:
+                if len(unscreened) >= max_articles:
                     break
 
-        unscreened = priority + non_priority
         if max_articles is not None:
             unscreened = unscreened[:max_articles]
 
@@ -114,6 +75,8 @@ class RayyanManager:
 
     def get_unscreened_fulltexts(self, max_articles: int | None = None) -> list[dict]:
         # TODO: this should include batching like get_unscreened_abstracts
+
+        # TODO: This should not use labels but instead check if I have already voted
         results_params = {"extra[mode]": "included"}
         labels_to_check = (
             list(config.RAYYAN_LABELS.values()) + config.RAYYAN_EXCLUSION_LABELS
@@ -125,8 +88,7 @@ class RayyanManager:
             lambda: self.review.results(self.review_id, results_params)  # type: ignore
         )
 
-        non_priority = []
-        priority = []
+        unscreened = []
 
         for article in results["data"]:  # type: ignore
             fulltext_id = self._get_fulltext_id(article)  # type: ignore
@@ -137,17 +99,11 @@ class RayyanManager:
             if any(label in labels_to_check for label in article_labels):
                 continue
 
-            if any(
-                label in config.ASANA_SEARCHES_ENUM_VALUES for label in article_labels
-            ):
-                priority.append(article)
-            else:
-                non_priority.append(article)
+            unscreened.append(article)
 
             if max_articles is not None:
-                if len(priority) + len(non_priority) >= max_articles:
+                if len(unscreened) >= max_articles:
                     break
-        unscreened = priority + non_priority
 
         if max_articles is not None:
             unscreened = unscreened[:max_articles]
@@ -254,13 +210,6 @@ class RayyanManager:
 
     @staticmethod
     def extract_article_metadata(rayyan_article: dict) -> dict:
-        searches = [
-            label
-            for label in rayyan_article.get("customizations", {})
-            .get("labels", [])
-            .keys()
-            if label in config.ASANA_SEARCHES_ENUM_VALUES.keys()
-        ]
         extracted_info = {
             "Rayyan ID": rayyan_article["id"],
             "Article Title": rayyan_article.get("title", ""),
@@ -270,7 +219,6 @@ class RayyanManager:
             ),
             "DOI": rayyan_article.get("doi", ""),
             "Year": rayyan_article.get("year", ""),
-            "Search": searches,
         }
 
         return extracted_info

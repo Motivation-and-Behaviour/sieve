@@ -2,17 +2,16 @@ from openai import OpenAI
 from openai.types import Batch, FileObject, FilePurpose
 from openai.types.responses.response_input_param import ResponseInputItemParam
 
-from bigger_picker.config import (
+from sieve.config import (
     ABSTRACT_SCREENING_INSTRUCTIONS,
-    ARTICLE_EXTRACTION_PROMPT,
     EXCLUSION_CRITERIA,
     FULLTEXT_SCREENING_INSTRUCTIONS,
     INCLUSION_CRITERIA,
     INCLUSION_HEADER,
     STUDY_OBJECTIVES,
 )
-from bigger_picker.credentials import load_token
-from bigger_picker.datamodels import ArticleLLMExtract, ScreeningDecision
+from sieve.credentials import load_token
+from sieve.datamodels import ScreeningDecision
 
 
 class OpenAIManager:
@@ -22,23 +21,6 @@ class OpenAIManager:
 
         self.client = OpenAI(api_key=api_key)
         self.model = model
-
-    def extract_article_info(self, pdf_path: str):
-        file = self.upload_file(pdf_path)
-
-        response = self.client.responses.parse(
-            model=self.model,
-            input=[
-                {"role": "system", "content": ARTICLE_EXTRACTION_PROMPT},
-                {
-                    "role": "user",
-                    "content": [{"type": "input_file", "file_id": file.id}],
-                },
-            ],
-            text_format=ArticleLLMExtract,
-        )
-
-        return response.output_parsed
 
     def screen_record_abstract(self, abstract: str):
         inputs = self._build_abstract_prompt(abstract)
@@ -76,25 +58,8 @@ class OpenAIManager:
         inputs = self._build_fulltext_prompt(file_id)
         return self._build_structured_payload(inputs, ScreeningDecision)
 
-    def prepare_extraction_body(self, file_id: str) -> dict:
-        """
-        Requires a file_id.
-        The IntegrationManager must call upload_file first.
-        """
-        inputs = [
-            {"role": "system", "content": ARTICLE_EXTRACTION_PROMPT},
-            {
-                "role": "user",
-                "content": [{"type": "input_file", "file_id": file_id}],
-            },
-        ]
-        return self._build_structured_payload(inputs, ArticleLLMExtract)
-
     def parse_screening_decision(self, json_content: str) -> ScreeningDecision:
         return ScreeningDecision.model_validate_json(json_content)
-
-    def parse_extraction_result(self, json_content: str) -> ArticleLLMExtract:
-        return ArticleLLMExtract.model_validate_json(json_content)
 
     def upload_file(
         self, file_path: str, purpose: FilePurpose = "user_data"

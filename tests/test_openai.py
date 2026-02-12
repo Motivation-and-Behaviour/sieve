@@ -2,8 +2,8 @@ import os
 
 import pytest
 
-import bigger_picker.credentials as credentials
-import bigger_picker.openai as openai
+import sieve.credentials as credentials
+import sieve.openai as openai
 
 
 class DummyFile:
@@ -61,33 +61,6 @@ def test_init_without_key_uses_load_token(monkeypatch, dummy_openai):
     # Remove direct call, use default None
     mgr = openai.OpenAIManager(api_key=None)  # noqa: F841
     assert dummy_openai["api_key"] == os.getenv("OPENAI_TOKEN")
-
-
-def test_extract_article_info(tmp_path, dummy_openai, monkeypatch):
-    # Create a dummy PDF file
-    pdf = tmp_path / "test.pdf"
-    pdf.write_bytes(b"%PDF-1.4 dummy")
-
-    mgr = openai.OpenAIManager(api_key="provided_key")
-    # Call extract_article_info
-    result = mgr.extract_article_info(str(pdf))
-
-    # Verify file.create used and parse used
-    # The DummyFile id must be used in parse call
-    # Because our FakeOpenAIClient always returns DummyResponse('parsed_output')
-    assert result == "parsed_output"
-
-    # Also ensure that the prompt constant is included in the system message
-    # by reading the first part of prompt
-    prompt = openai.ARTICLE_EXTRACTION_PROMPT
-    assert "You are an experienced research assistant" in prompt
-
-
-def test_extract_article_info_file_open_error(monkeypatch):
-    # Simulate error opening the file
-    mgr = openai.OpenAIManager(api_key="provided_key")
-    with pytest.raises(FileNotFoundError):
-        mgr.extract_article_info("nope.pdf")
 
 
 class DummyBatch:
@@ -165,16 +138,6 @@ class TestPrepareFulltextBody:
         assert "text" in body
 
 
-class TestPrepareExtractionBody:
-    def test_returns_structured_payload(self, mock_openai_manager):
-        body = mock_openai_manager.prepare_extraction_body("file_123")
-
-        assert "model" in body
-        assert "input" in body
-        assert "text" in body
-        assert body["text"]["format"]["name"] == "ArticleLLMExtract"
-
-
 class TestParseScreeningDecision:
     def test_parses_valid_json(self, mock_openai_manager):
         json_str = """{
@@ -203,27 +166,6 @@ class TestParseScreeningDecision:
 
         assert decision.vote == "exclude"
         assert decision.triggered_exclusion == [1]
-
-
-class TestParseExtractionResult:
-    def test_parses_valid_extraction(self, mock_openai_manager):
-        json_str = """{
-            "Corresponding Author": "Dr. Smith",
-            "Corresponding Author Email": null,
-            "Year of Last Data Point": null,
-            "Total Sample Size": 500,
-            "Study Design": "Cross-sectional",
-            "Countries of Data": null,
-            "Dataset Name": null,
-            "populations": [],
-            "screen_time_measures": [],
-            "outcomes": []
-        }"""
-        result = mock_openai_manager.parse_extraction_result(json_str)
-
-        assert result.corresponding_author == "Dr. Smith"
-        assert result.total_sample_size == 500
-        assert result.study_design == "Cross-sectional"
 
 
 class TestUploadFile:

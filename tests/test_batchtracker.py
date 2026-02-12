@@ -5,7 +5,7 @@ from datetime import datetime
 
 import pytest
 
-from bigger_picker.batchtracker import BatchTracker
+from sieve.batchtracker import BatchTracker
 
 
 @pytest.fixture

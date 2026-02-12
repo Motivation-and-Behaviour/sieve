@@ -5,8 +5,8 @@ from unittest.mock import MagicMock
 import pytest
 import requests
 
-import bigger_picker.config as config
-from bigger_picker.rayyan import RayyanManager
+import sieve.config as config
+from sieve.rayyan import RayyanManager
 
 
 # Sample config values
@@ -18,8 +18,8 @@ def test_init_uses_default_path_and_labels(monkeypatch, tmp_path):
     # Patch Rayyan and Review to dummy constructors
     DummyRayyan = MagicMock()
     DummyReview = MagicMock()
-    monkeypatch.setattr("bigger_picker.rayyan.Rayyan", lambda p: DummyRayyan)
-    monkeypatch.setattr("bigger_picker.rayyan.Review", lambda inst: DummyReview)
+    monkeypatch.setattr("sieve.rayyan.Rayyan", lambda p: DummyRayyan)
+    monkeypatch.setattr("sieve.rayyan.Review", lambda inst: DummyReview)
     # Instantiate without args
     mgr = RayyanManager()
     # Should load creds path from env
@@ -28,8 +28,6 @@ def test_init_uses_default_path_and_labels(monkeypatch, tmp_path):
     assert mgr.rayyan_instance is DummyRayyan
     assert mgr.review is DummyReview
     assert mgr.review_id == config.RAYYAN_REVIEW_ID
-    assert mgr.unextracted_label == config.RAYYAN_LABELS["unextracted"]
-    assert mgr.extracted_label == config.RAYYAN_LABELS["extracted"]
 
 
 def test_extract_article_metadata_and_helpers():
@@ -50,7 +48,6 @@ def test_extract_article_metadata_and_helpers():
         "Journal": "Journal Name",
         "DOI": "10.1000/xyz",
         "Year": "2022",
-        "Search": ["SDQ"],
     }
 
     # Test join_names multiline
@@ -91,10 +88,10 @@ def test_download_pdf_success_and_no_url(monkeypatch, tmp_path):
                 raise requests.HTTPError()
 
     dummy = DummyResponse(b"binarypdf")
-    monkeypatch.setattr("bigger_picker.rayyan.requests.get", lambda url: dummy)
+    monkeypatch.setattr("sieve.rayyan.requests.get", lambda url: dummy)
 
     # Mock tempfile.mkdtemp to use tmp_path
-    monkeypatch.setattr("bigger_picker.rayyan.tempfile.mkdtemp", lambda: str(tmp_path))
+    monkeypatch.setattr("sieve.rayyan.tempfile.mkdtemp", lambda: str(tmp_path))
 
     # Create RayyanManager instance with mocked rayyan_instance
     fake_path = tmp_path / "creds.json"
@@ -144,46 +141,15 @@ def mock_manager(monkeypatch, tmp_path):
     mock_rayyan = MagicMock()
     mock_review = MagicMock()
     mock_notes = MagicMock()
-    monkeypatch.setattr("bigger_picker.rayyan.Rayyan", lambda p: mock_rayyan)
-    monkeypatch.setattr("bigger_picker.rayyan.Review", lambda inst: mock_review)
-    monkeypatch.setattr("bigger_picker.rayyan.Notes", lambda inst: mock_notes)
+    monkeypatch.setattr("sieve.rayyan.Rayyan", lambda p: mock_rayyan)
+    monkeypatch.setattr("sieve.rayyan.Review", lambda inst: mock_review)
+    monkeypatch.setattr("sieve.rayyan.Notes", lambda inst: mock_notes)
 
     manager = RayyanManager()
     manager.rayyan_instance = mock_rayyan
     manager.review = mock_review
     manager.notes_instance = mock_notes
     return manager
-
-
-class TestGetUnextractedArticles:
-    def test_returns_articles_with_unextracted_label(self, mock_manager):
-        mock_manager.review.results.return_value = {
-            "data": [
-                {
-                    "id": 1,
-                    "fulltexts": [{"test_fulltext": "value"}],
-                    "customizations": {"labels": {}},
-                },
-                {
-                    "id": 2,
-                    "fulltexts": [{"test_fulltext": "value"}],
-                    "customizations": {"labels": {"SDQ": 1}},
-                },
-            ]
-        }
-
-        articles = mock_manager.get_unextracted_articles()
-
-        # Priority articles (with search labels) should come first
-        assert len(articles) == 2
-        assert articles[0]["id"] == 2  # Has SDQ label (priority)
-        assert articles[1]["id"] == 1
-
-    def test_empty_results(self, mock_manager):
-        mock_manager.review.results.return_value = {"data": []}
-
-        articles = mock_manager.get_unextracted_articles()
-        assert articles == []
 
 
 class TestGetUnscreenedAbstracts:
@@ -208,8 +174,8 @@ class TestGetUnscreenedAbstracts:
 
         # Should include id 1 and 3 (priority), exclude id 2 (already labeled)
         assert len(articles) == 2
-        assert articles[0]["id"] == 3  # Priority (SDQ)
-        assert articles[1]["id"] == 1
+        assert articles[0]["id"] == 1
+        assert articles[1]["id"] == 3
 
     def test_respects_max_articles(self, mock_manager):
         mock_manager.review.results.side_effect = [
@@ -326,7 +292,7 @@ class TestRetryOnAuthError:
 
         # Mock token refresh
         monkeypatch.setattr(
-            "bigger_picker.rayyan.requests.post",
+            "sieve.rayyan.requests.post",
             lambda url, data: MagicMock(
                 ok=True, json=lambda: {"refresh_token": "new", "access_token": "new"}
             ),
@@ -343,7 +309,7 @@ class TestRetryOnAuthError:
             raise requests.HTTPError(response=response)
 
         monkeypatch.setattr(
-            "bigger_picker.rayyan.requests.post",
+            "sieve.rayyan.requests.post",
             lambda url, data: MagicMock(
                 ok=True, json=lambda: {"refresh_token": "new", "access_token": "new"}
             ),

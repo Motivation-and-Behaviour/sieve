@@ -3,47 +3,26 @@ requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "bigger_picker"
+name = "sieve"
 version = "0.3.0"
-description = "A simple set of tools to link Rayyan, Airtable, Asana, and OpenAI for supporting the Bigger Picture project."
+description = "Sieve (Systematic Identification, EValuation, and Extraction) is a set of tools to conduct abstract and full-text screening, and (eventually) data extraction."
 authors = [{ name = "Taren Sanders", email = "taren.sanders@acu.edu.au" }]
 readme = "README.md"
-requires-python = ">=3.11"
-dependencies = [
-    "asana",
-    "dotenv",
-    "openai",
-    "pandas",
-    "pyairtable",
-    "pydantic",
-    "rayyan-sdk",
-    "recordlinkage",
-    "typer",
-]
+requires-python = ">=3.13"
+dependencies = ["dotenv", "openai", "rayyan-sdk", "typer"]
 
 [project.optional-dependencies]
 dev = ["jupyter", "pytest", "pytest-cov", "rispy", "ruff"]
 
-docs = [
-    "mkdocs",
-    "mkdocs-click",
-    "mkdocs-git-authors-plugin",
-    "mkdocs-git-revision-date-localized-plugin",
-    "mkdocs-glightbox",
-    "mkdocs-material",
-]
-
-web = ["flask", "gunicorn"]
-
 [project.scripts]
-bigger-picker = "bigger_picker.cli:app"
+bigger-picker = "sieve.cli:app"
 
 [tool.setuptools.packages.find]
 where = ["."]
 
 [tool.ruff]
 line-length = 88
-target-version = "py311"
+target-version = "py313"
 exclude = [".venv", "__pycache__", "scratch*"]
 
 [tool.ruff.lint]

@@ -1,23 +1,58 @@
-# Bigger Picker
+# Sieve
 
 [![Ruff](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json)](https://github.com/astral-sh/ruff)
-![GitHub License](https://img.shields.io/github/license/Motivation-and-Behaviour/bigger_picker)
-[![Actions status](https://github.com/Motivation-and-Behaviour/bigger_picker/workflows/Tests/badge.svg)](https://github.com/Motivation-and-Behaviour/bigger_picker/actions)
-[![codecov](https://codecov.io/gh/Motivation-and-Behaviour/bigger_picker/graph/badge.svg?token=QvpFlLP1JD)](https://codecov.io/gh/Motivation-and-Behaviour/bigger_picker)
+![GitHub License](https://img.shields.io/github/license/Motivation-and-Behaviour/sieve)
+[![Actions status](https://github.com/Motivation-and-Behaviour/sieve/workflows/Tests/badge.svg)](https://github.com/Motivation-and-Behaviour/sieve/actions)
+[![codecov](https://codecov.io/gh/Motivation-and-Behaviour/sieve/graph/badge.svg?token=QvpFlLP1JD)](https://codecov.io/gh/Motivation-and-Behaviour/sieve)
 
-Bigger Picker is a a simple set of tools to support the [Bigger Picture](https://github.com/Motivation-and-Behaviour/bigger_picture) project.
-It is meant to streamline the process of extracting, managing, and syncing research article metadata and datasets across multiple platforms, including Airtable, Asana, Rayyan, and OpenAI.
+Sieve (Systematic Identification, EValuation, and Extraction) is a set of tools to conduct abstract and full-text screening, and (eventually) data extraction.
+It is the generic version of the project-specific tool [Bigger Picker](https://github.com/Motivation-and-Behaviour/bigger_picker).
+
+## Features
+
+The sieve package is still in development and does not yet have all the features of the Bigger Picker, but it includes the following:
+
+- **Abstract screening**: Using OpenAI's models to screen abstracts based on a provided protocol and use this information to vote on Rayyan.
+- **Full-text screening**: Using OpenAI's models to screen full texts by taking the full-text PDF from Rayyan.
+
+Features that are available in Bigger Picker but not yet in Sieve include:
+
+- **Data extraction**: Using OpenAI's models to extract data from full texts based on a provided protocol and use this information to populate an Airtable base.
+
+Features in Bigger Picker that are not planned for Sieve include:
+
+- **Asana integration**: Syncing article statuses between Airtable and Asana.
+
+## Prerequisites
+
+### API Keys and Tokens
+
+- **Rayyan API Key**: Used to interact with the Rayyan Review.
+   Note that Rayyan only provies API keys for Pro accounts.
+   You can either provide the `rayyan_tokens.json` file directly, or store the credentials in the environment variable `RAYYAN_CREDS_JSON` as a JSON string.
+- **OpenAI API Key**: Used to access OpenAI's language models for screening and data extraction.
+
+### Environment
+
+The project is built and tested using Python 3.13, but should work on Python 3.11 and above.
 
 ## Installation
 
 1. Clone the repository:
 
    ```sh
-   git clone https://github.com/Motivation-and-Behaviour/bigger_picker.git
-   cd bigger_picker
+   git clone https://github.com/Motivation-and-Behaviour/sieve.git
+   cd sieve
    ```
 
-2. Install dependencies:
+2. (Optional) Create and activate a virtual environment:
+
+   ```sh
+   python -m venv .venv
+   source ./venv/bin/activate #On Windows, use .\venv\Scripts\activate
+   ```
+
+3. Install dependencies:
 
    ```sh
    pip install -e .
@@ -26,19 +61,17 @@ It is meant to streamline the process of extracting, managing, and syncing resea
     You can also optionally install the development dependencies:
 
    ```sh
-   pip install -e .[dev]
+   pip install -e .[dev, docs]
    ```
 
-3. Set up your `.env` file with the required API keys and configuration values.
+4. Set up your `.env` file with the required API keys and configuration values.
    The provided `.env.example` can be used as a template.
 
 ## Configuration
 
-Most settings for the project are set in the [bigger_picker/config.py](bigger_picker/config.py) file.
+Most settings for the project are set in the [sieve/config.py](sieve/config.py) file.
 If you are using this package for a project other than the Bigger Picture, you will need to adjust the settings there.
-Some other components are also hardcoded.
 
-You will need API keys for Airtable, Asana, and OpenAI.
 You will also need a `rayyan_tokens.json` file for Rayyan API authentication.
 
 ## Usage
@@ -50,17 +83,17 @@ The CLI provides two main commands:
 - **Process articles and extract data:**
 
   ```sh
-  bigger_picker process
+  sieve process
   ```
 
 - **Sync Airtable and Asana statuses:**
 
   ```sh
-  bigger_picker sync
+  sieve sync
   ```
 
 Appending `--help` to either command will provide additional options and usage information.
-See `python -m bigger_picker.cli --help` for all options.
+See `python -m sieve.cli --help` for all options.
 
 ## License
 

@@ -64,6 +64,6 @@ jobs:
             "actor": "${{ github.actor }}",
             "repository": "${{ github.repository }}",
             "commit_message": "${{ github.event.head_commit.message }}",
-            "docs_url": "https://https://motivation-and-behaviour.github.io/bigger_picker/",
+            "docs_url": "https://https://motivation-and-behaviour.github.io/sieve/",
             "commit_url": "https://github.com/${{ github.repository }}/commit/${{ github.sha }}"
           }' ${{ secrets.TEAMS_WORKFLOW_URL }}
