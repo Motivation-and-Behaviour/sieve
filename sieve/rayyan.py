@@ -56,7 +56,9 @@ class RayyanManager:
             )
 
             for article in results["data"]:  # type: ignore
-                article_labels = article.get("customizations", {}).get("labels", {})  # type: ignore
+                article_customizations = article.get("customizations", {})  # type: ignore
+                label_key = self._get_label_key(article_customizations)
+                article_labels = article.get("customizations", {}).get(label_key, {})  # type: ignore
                 if any(label in labels_to_check for label in article_labels):
                     continue
 
@@ -91,7 +93,9 @@ class RayyanManager:
             if fulltext_id is None:
                 continue
 
-            article_labels = article.get("customizations", {}).get("labels", {})  # type: ignore
+            article_customizations = article.get("customizations", {})  # type: ignore
+            label_key = self._get_label_key(article_customizations)
+            article_labels = article.get("customizations", {}).get(label_key, {})  # type: ignore
             if any(label in labels_to_check for label in article_labels):
                 continue
 
@@ -244,3 +248,10 @@ class RayyanManager:
                 break
 
         return fulltext_id
+
+    @staticmethod
+    def _get_label_key(customizations: dict) -> str | None:
+        for key in customizations.keys():
+            if key.startswith("labels"):
+                return key
+        return None
