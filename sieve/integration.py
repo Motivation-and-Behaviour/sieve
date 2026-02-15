@@ -219,7 +219,7 @@ class IntegrationManager:
             stats["status"] = f"[red]Rayyan Error: {e}[/red]"
             self._log(f"Rayyan monitoring error: {e}", "error")
             live.update(utils.create_stats_table(stats))
-            return None, None, None, stats
+            return None, None, stats
 
     @requires_services("openai", "tracker")
     def create_batches(
