@@ -1,5 +1,5 @@
 # _______RAYYAN_________
-RAYYAN_REVIEW_ID = 1869703
+RAYYAN_REVIEW_ID = 1723555
 RAYYAN_LABELS = {
     "included": "Sieve Included",
     "excluded": "Sieve Excluded",
@@ -9,18 +9,18 @@ RAYYAN_LABELS = {
     "batch_pending": "Sieve Batch Pending",
 }
 RAYYAN_EXCLUSION_LABELS = [
-    "__EXR__wrong age",
-    "__EXR__wrong study design",
-    "__EXR__wrong intervention",
-    "__EXR__wrong outcome",
-    "__EXR__animal or in vitro",
-    "__EXR__foreign language",
-    "__EXR__grey literature",
+    "__EXR__not scholarly or not empirical",
+    "__EXR__conference abstract",
+    "__EXR__wrong population",
+    "__EXR__not school-based placement context",
+    "__EXR__motivation not placement-linked",
+    "__EXR__motivation not central",
+    "__EXR__not initial teacher education context",
 ]
 
 # _______OPENAI_________
 STUDY_OBJECTIVES = """
-The objective of this review is to synthesise the available evidence on the effects of creatine supplementation on cognitive function in healthy and clinical adult populations.
+The objective of this review is to systematically identify, appraise, and synthesise global empirical research examining how school-based professional experience placements (e.g., practicum, internship, student teaching) influence pre-service teachers’ motivation within Initial Teacher Education programs, and to determine which placement features most strongly foster or hinder motivation.
 """  # noqa: E501
 
 INCLUSION_HEADER = """
@@ -28,20 +28,21 @@ The following is an excerpt of 2 sets of criteria. A study is considered include
 """  # noqa: E501
 
 INCLUSION_CRITERIA = [
-    "Healthy or clinical adult populations aged ≥18 years. Include studies with a mean sample age of 18 years or older. If a mean age is not available, use the midpoint of the reported age range.",  # noqa: E501
-    "Randomised controlled trials (RCTs) or quasi-experimental studies with a control or placebo group.",  # noqa: E501
-    "Intervention involves oral creatine supplementation (e.g., creatine monohydrate) administered alone or as the primary active ingredient. Studies using creatine as part of a multi-ingredient supplement are included only if creatine is the sole difference between intervention and control conditions.",  # noqa: E501
-    "Quantitative measurement of at least one cognitive outcome. Examples include: (i) Memory: short-term memory, working memory, long-term recall; (ii) Executive function: attention, inhibition, cognitive flexibility, task switching; (iii) Processing speed: reaction time, rapid information processing; (iv) Higher-order cognition: reasoning, problem-solving, fluid intelligence; (v) Mood and mental fatigue: subjective cognitive fatigue, mental effort, mood state assessed in conjunction with cognitive tasks.",  # noqa: E501
+    "Population are pre-service teachers (teacher candidates/student teachers) enrolled in a university education degree (undergraduate or postgraduate).",  # noqa: E501
+    "Must be situated in a school-based professional experience placement that forms part of Initial Teacher Education (e.g., practicum, teaching practice, internship, student teaching, field experience) with authentic school/classroom engagement under supervision. Early childhood, primary (elementary), and secondary (high school) settings are eligible where the placement is school based.",  # noqa: E501
+    "Must examine motivation during professional experience placements or directly links motivation outcomes/experiences to the placement context.",  # noqa: E501
+    "Must include a measure of motivation, such as self-efficacy, self-determination theory (SDT), engagement, commitment, persistence/attrition, expectancy-value, achievement goals, interest/intrinsic motivation, autonomy/need satisfaction (autonomy, competence, relatedness), controlled motivation/external regulation, intention to stay/retention, and motivation-related wellbeing indicators where motivation is a central construct.",  # noqa: E501
+    "Must be empirical research with original data collection and/or analysis, using qualitative, quantitative, or mixed-methods designs.",  # noqa: E501
 ]
 
 EXCLUSION_CRITERIA = [
-    "Children and adolescents aged <18 years. Exclude studies with a mean sample age younger than 18 years. If the mean age is unclear, exclude if the midpoint of the age range is less than 18 years.",  # noqa: E501
-    "Studies without an experimental or quasi-experimental design, including: narrative or systematic reviews, meta-analyses, editorials, commentaries, case reports or case series, observational studies (cross-sectional, cohort, or case-control) with no intervention, and qualitative-only designs.",  # noqa: E501
-    "Intervention does not include creatine supplementation, or creatine is combined with other active compounds (e.g., caffeine, beta-alanine) without an appropriate control condition isolating the effect of creatine.",  # noqa: E501
-    "Does not include at least one quantitatively measured cognitive outcome. Studies reporting only physical performance outcomes (e.g., strength, power, body composition) without any cognitive measure are excluded.",  # noqa: E501
-    "Animal studies or in vitro research.",  # noqa: E501
-    "Full-text not available in English.",  # noqa: E501
-    "Conference abstracts, dissertations, or grey literature where insufficient methodological detail is available to assess eligibility and risk of bias.",  # noqa: E501
+    "Studies that are non-empirical or not a research study, such as an editorial, opinion/commentary piece, conceptual/theoretical paper without original data, protocol, book review, or other item lacking original analysis.",  # noqa: E501
+    "Exclude conference abstracts or conference proceedings.",  # noqa: E501
+    "Participants are not pre-service teachers in an Initial Teacher Education program (e.g., in-service teachers only, teacher educators only without a pre-service focus, school students, or general university students not in teacher education).",  # noqa: E501
+    "The experience is not a school-based professional placement (e.g., campus-based simulation, coursework-only experiences, micro-teaching, peer teaching, or activities without authentic school/classroom placement engagement).",  # noqa: E501
+    "Studies that discuss motivation in a way that is not connected to professional experience placement (e.g., motivation for coursework, general academic motivation, or motivation unrelated to practicum/internship/student teaching).",  # noqa: E501
+    "Motivation is peripheral or mentioned only in passing and is not a focus, outcome, or substantively analysed construct in the study.",  # noqa: E501
+    "Studies that are not situated within Initial Teacher Education professional experience (e.g., induction/early career teacher programs, in-service professional learning placements, or other contexts not part of formal ITE practicum/internship requirements).",  # noqa: E501
 ]
 
 FULLTEXT_SCREENING_INSTRUCTIONS = """
