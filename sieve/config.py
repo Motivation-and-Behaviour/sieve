@@ -14,7 +14,6 @@ RAYYAN_EXCLUSION_LABELS = [
     "__EXR__wrong population",
     "__EXR__not school-based placement context",
     "__EXR__motivation not placement-linked",
-    "__EXR__motivation not central",
     "__EXR__not initial teacher education context",
 ]
 
@@ -30,18 +29,16 @@ The following is an excerpt of 2 sets of criteria. A study is considered include
 INCLUSION_CRITERIA = [
     "Population are pre-service teachers (teacher candidates/student teachers) enrolled in a university education degree (undergraduate or postgraduate).",  # noqa: E501
     "Must be situated in a school-based professional experience placement that forms part of Initial Teacher Education (e.g., practicum, teaching practice, internship, student teaching, field experience) with authentic school/classroom engagement under supervision. Early childhood, primary (elementary), and secondary (high school) settings are eligible where the placement is school based.",  # noqa: E501
-    "Must examine motivation during professional experience placements or directly links motivation outcomes/experiences to the placement context.",  # noqa: E501
-    "Must include a measure of motivation, such as self-efficacy, self-determination theory (SDT), engagement, commitment, persistence/attrition, expectancy-value, achievement goals, interest/intrinsic motivation, autonomy/need satisfaction (autonomy, competence, relatedness), controlled motivation/external regulation, intention to stay/retention, and motivation-related wellbeing indicators where motivation is a central construct.",  # noqa: E501
+    "Must examine pre-service teacher motivation in the context of professional experience placement (during placement, immediately before/after, or explicitly linked to placement experiences) and treat motivation as a central construct, evidenced by either (a) a stated motivation measure (e.g., self-efficacy, SDT/need satisfaction, expectancy-value, achievement goals, interest/intrinsic motivation, engagement/commitment, controlled/external regulation, intention to stay/retention, persistence/attrition) or (b) motivation as a primary qualitative/analytical focus."  # noqa: E501
     "Must be empirical research with original data collection and/or analysis, using qualitative, quantitative, or mixed-methods designs.",  # noqa: E501
 ]
 
 EXCLUSION_CRITERIA = [
     "Studies that are non-empirical or not a research study, such as an editorial, opinion/commentary piece, conceptual/theoretical paper without original data, protocol, book review, or other item lacking original analysis.",  # noqa: E501
     "Exclude conference abstracts or conference proceedings.",  # noqa: E501
-    "Participants are not pre-service teachers in an Initial Teacher Education program (e.g., in-service teachers only, teacher educators only without a pre-service focus, school students, or general university students not in teacher education).",  # noqa: E501
+    "Participants are not pre-service teachers in Initial Teacher Education (e.g., in-service teachers only, teacher educators only without a pre-service focus, school students, or general university students not in teacher education).",  # noqa: E501
     "The experience is not a school-based professional placement (e.g., campus-based simulation, coursework-only experiences, micro-teaching, peer teaching, or activities without authentic school/classroom placement engagement).",  # noqa: E501
     "Studies that discuss motivation in a way that is not connected to professional experience placement (e.g., motivation for coursework, general academic motivation, or motivation unrelated to practicum/internship/student teaching).",  # noqa: E501
-    "Motivation is peripheral or mentioned only in passing and is not a focus, outcome, or substantively analysed construct in the study.",  # noqa: E501
     "Studies that are not situated within Initial Teacher Education professional experience (e.g., induction/early career teacher programs, in-service professional learning placements, or other contexts not part of formal ITE practicum/internship requirements).",  # noqa: E501
 ]
 
