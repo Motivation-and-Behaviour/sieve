@@ -36,7 +36,7 @@ class RayyanManager:
         )
 
         # First just to get the total number of results
-        results_params = {"start": 0, "length": 10, "extra[mode]": "undecided"}
+        results_params = {"start": 0, "length": 10}
         results = self._retry_on_auth_error(
             lambda: self.review.results(self.review_id, results_params)  # type: ignore
         )
@@ -46,11 +46,7 @@ class RayyanManager:
         unscreened = []
 
         for batch in batches:
-            results_params = {
-                "start": batch[0],
-                "length": len(batch),
-                "extra[mode]": "undecided",
-            }
+            results_params = {"start": batch[0],"length": len(batch)}
             results = self._retry_on_auth_error(
                 partial(self.review.results, self.review_id, results_params)  # type: ignore
             )
